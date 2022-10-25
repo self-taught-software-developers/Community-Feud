@@ -32,4 +32,9 @@ object FamilyFeudModule {
     @Singleton
     fun provideAnswerCardDao(database: FamilyFeudDatabase) = database.answerCardDao()
 
+    @Provides
+    fun provideTeamDao(database: FamilyFeudDatabase) = database.teamDao()
+
+    @Provides
+    fun providePlayerDao(database: FamilyFeudDatabase) = database.playerDao()
 }
