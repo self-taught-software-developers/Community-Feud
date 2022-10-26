@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cerve.co.familyfeudincompose.ui.FamilyFeudViewModel
+import com.cerve.co.familyfeudincompose.ui.navigation.Graph
 import com.cerve.co.familyfeudincompose.ui.theme.FamilyFeudInComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,28 +25,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FamilyFeudInComposeTheme {
-                // A surface container using the 'background' color from the theme
-                val viewModel = viewModel<FamilyFeudViewModel>()
-                val team by viewModel.teamNowPlaying.collectAsState()
-
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) { Greeting("Android") }
+                Graph()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    FamilyFeudInComposeTheme {
-        Greeting("Android")
     }
 }

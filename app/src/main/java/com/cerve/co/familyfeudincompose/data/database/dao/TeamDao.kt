@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TeamDao {
 
-    @Query("SELECT * FROM team WHERE MAX(points) LIMIT 1")
+    @Query("SELECT * FROM team ORDER BY points ASC LIMIT 1")
     fun teamWithMostPoints(): Flow<Team>
 
     @Query("SELECT * FROM team WHERE name = :name")
