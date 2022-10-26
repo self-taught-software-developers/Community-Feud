@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cerve.co.familyfeudincompose.data.FamilyFeudRepository
-import com.cerve.co.familyfeudincompose.data.database.entity.Team
 import com.cerve.co.familyfeudincompose.ui.model.AnswerCardState
 import com.cerve.co.familyfeudincompose.ui.model.QuestionCardState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,9 +18,21 @@ class FamilyFeudViewModel @Inject constructor(
 ) : ViewModel() {
 
     val questions = mutableStateListOf<QuestionCardState>()
+    private val _currentQuestion = MutableStateFlow<QuestionCardState?>(null)
+    val currentQuestion = _currentQuestion.asStateFlow()
+
+    val createdTeams = repository.fetchAllTeams()
+        .stateIn(viewModelScope, WhileSubscribed(), emptyList())
+
+    val hasGone = mutableStateListOf<String>()
 
     private val _nowPlaying = MutableStateFlow<String?>(null)
-    val nowPlaying = _nowPlaying.asStateFlow().onEach { _strikeAccumulation.update { 0 } }
+    val nowPlaying = _nowPlaying.asStateFlow().onEach { name ->
+        name?.let {
+            _strikeAccumulation.update { 0 }
+            hasGone.add(name)
+        }
+    }
 
     val teamNowPlaying = nowPlaying.flatMapMerge { name ->
         repository.fetchTeam(name)
@@ -50,6 +61,16 @@ class FamilyFeudViewModel @Inject constructor(
         }
     }
 
+    fun nextTeam() = viewModelScope.launch {
+        createdTeams.value.filterNot { it.name in hasGone }
+            .random().also { _nowPlaying.update { it } }
+    }
+
+    fun selectQuestion(index: Int) = viewModelScope.launch {
+        _currentQuestion.update { questions[index] }
+        questions.removeAt(index)
+    }
+
     fun addStrike() { _strikeAccumulation.update { it + 1 } }
 
     fun removeQuestion(name: String) = viewModelScope.launch {
@@ -60,7 +81,7 @@ class FamilyFeudViewModel @Inject constructor(
         repository.createTeam(name, playerCount)
     }
 
-    fun giveTeamPoints(points: Int) = viewModelScope.launch {
+    fun awardPoints(points: Int) = viewModelScope.launch {
         teamNowPlaying.value?.let { team ->
             repository.updatePoints(team.copy(points = team.points + points))
         }

@@ -1,9 +1,6 @@
 package com.cerve.co.familyfeudincompose.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.cerve.co.familyfeudincompose.data.database.entity.Team
 import kotlinx.coroutines.flow.Flow
 
@@ -16,10 +13,10 @@ interface TeamDao {
     @Query("SELECT * FROM team WHERE name = :name")
     fun getByName(name: String?): Flow<Team>
 
-    @Insert
-    suspend fun addTeam(team: Team)
+    @Query("SELECT * FROM team")
+    fun getAll(): Flow<List<Team>>
 
-    @Update
-    suspend fun updateTeam(team: Team)
+    @Upsert
+    suspend fun upsertTeam(team: Team)
 
 }

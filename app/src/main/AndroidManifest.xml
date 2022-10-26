@@ -13,11 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FamilyFeudInCompose"
         tools:targetApi="33">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.FamilyFeudInCompose">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.FamilyFeudInCompose"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

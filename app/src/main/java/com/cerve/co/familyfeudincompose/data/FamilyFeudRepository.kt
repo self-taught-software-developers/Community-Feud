@@ -15,12 +15,12 @@ class FamilyFeudRepository @Inject constructor(
     suspend fun getQuestionCards() = answerCardDao.getAll()
         .groupBy { it.question }
 
-
+    fun fetchAllTeams() = teamDao.getAll()
     fun fetchTeamWithMostPoints() = teamDao.teamWithMostPoints()
     fun fetchTeam(name: String?) = teamDao.getByName(name)
 
     suspend fun createTeam(name: String, turns: Int) {
-        teamDao.addTeam(
+        teamDao.upsertTeam(
             Team(
                 name = name,
                 points = 0,
@@ -30,7 +30,7 @@ class FamilyFeudRepository @Inject constructor(
     }
 
     suspend fun updatePoints(team: Team) {
-        teamDao.updateTeam(team)
+        teamDao.upsertTeam(team)
     }
 
 }
