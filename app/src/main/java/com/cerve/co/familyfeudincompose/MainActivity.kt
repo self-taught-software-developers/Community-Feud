@@ -12,6 +12,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowCompat.setDecorFitsSystemWindows
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cerve.co.familyfeudincompose.ui.FamilyFeudViewModel
 import com.cerve.co.familyfeudincompose.ui.navigation.Graph
@@ -22,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setDecorFitsSystemWindows(window, false)
 
         setContent {
             FamilyFeudInComposeTheme {

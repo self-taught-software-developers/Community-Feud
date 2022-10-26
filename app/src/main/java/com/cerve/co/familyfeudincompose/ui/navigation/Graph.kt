@@ -1,6 +1,7 @@
 package com.cerve.co.familyfeudincompose.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -29,14 +30,19 @@ fun Graph(
 
         composable(TEAM_CREATION) {
 
+
+
         }
 
         composable(MAIN_GAME) {
 
+            val strikes = vm.strikeAccumulation.collectAsState()
+            val team = vm.teamNowPlaying.collectAsState()
+
         }
 
         composable(WINNER) {
-
+            val winner = vm.winningTeam.collectAsState()
         }
 
     }
