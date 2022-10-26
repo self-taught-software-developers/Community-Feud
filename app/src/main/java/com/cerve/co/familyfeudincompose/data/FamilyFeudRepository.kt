@@ -1,15 +1,13 @@
 package com.cerve.co.familyfeudincompose.data
 
 import com.cerve.co.familyfeudincompose.data.database.dao.AnswerCardDao
-import com.cerve.co.familyfeudincompose.data.database.dao.PlayerDao
-import com.cerve.co.familyfeudincompose.data.database.dao.TeamDao
-import com.cerve.co.familyfeudincompose.data.database.entity.Team
+import com.cerve.co.familyfeudincompose.data.database.dao.TeamCardDao
+import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
 import javax.inject.Inject
 
 class FamilyFeudRepository @Inject constructor(
     private val answerCardDao: AnswerCardDao,
-    private val teamDao: TeamDao,
-    private val playerDao: PlayerDao
+    private val teamDao: TeamCardDao
 ) {
 
     suspend fun getQuestionCards() = answerCardDao.getAll()
@@ -21,7 +19,7 @@ class FamilyFeudRepository @Inject constructor(
 
     suspend fun createTeam(name: String, turns: Int) {
         teamDao.upsertTeam(
-            Team(
+            TeamCard(
                 name = name,
                 points = 0,
                 turns = turns
@@ -29,7 +27,7 @@ class FamilyFeudRepository @Inject constructor(
         )
     }
 
-    suspend fun updatePoints(team: Team) {
+    suspend fun updatePoints(team: TeamCard) {
         teamDao.upsertTeam(team)
     }
 

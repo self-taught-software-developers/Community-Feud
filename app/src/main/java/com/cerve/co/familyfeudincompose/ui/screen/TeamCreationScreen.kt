@@ -1,7 +1,6 @@
 package com.cerve.co.familyfeudincompose.ui.screen
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
@@ -17,12 +16,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cerve.co.familyfeudincompose.data.database.entity.Team
+import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
 import com.cerve.co.familyfeudincompose.ui.theme.FamilyFeudInComposeTheme
 
 @Composable
 fun TeamCreationScreen(
-    teamList: List<Team>,
+    teamList: List<TeamCard>,
     onNavigate: () -> Unit,
     modifier: Modifier = Modifier,
     onClick: (String, Int) -> Unit = { _, _ -> }

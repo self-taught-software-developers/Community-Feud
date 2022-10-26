@@ -8,12 +8,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.cerve.co.familyfeudincompose.data.database.entity.Team
+import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
 import com.cerve.co.familyfeudincompose.ui.theme.FamilyFeudInComposeTheme
 
 @Composable
 fun WinnerScreen(
-    team: Team?,
+    team: TeamCard?,
     modifier: Modifier = Modifier,
     onRestartGame: () -> Unit = { },
 ) {
@@ -81,7 +81,7 @@ fun WinnerScreen(
 fun WinnerScreenPreview() {
     FamilyFeudInComposeTheme {
         WinnerScreen(
-            team = Team(
+            team = TeamCard(
                 name = "Lorem ipsum",
                 points = 200,
                 turns = 5

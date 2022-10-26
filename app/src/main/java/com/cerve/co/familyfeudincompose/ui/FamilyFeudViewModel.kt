@@ -1,10 +1,11 @@
 package com.cerve.co.familyfeudincompose.ui
 
+import android.provider.SyncStateContract.Helpers.update
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cerve.co.familyfeudincompose.data.FamilyFeudRepository
-import com.cerve.co.familyfeudincompose.data.database.entity.Team
+import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
 import com.cerve.co.familyfeudincompose.ui.model.AnswerCardState
 import com.cerve.co.familyfeudincompose.ui.model.QuestionCardState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,12 +23,12 @@ class FamilyFeudViewModel @Inject constructor(
     private val _currentQuestion = MutableStateFlow<QuestionCardState?>(null)
     val currentQuestion = _currentQuestion.asStateFlow()
 
-    val hasGone = mutableStateListOf<String>()
+    private val hasGone = mutableStateListOf<String>()
 
     val createdTeams = repository.fetchAllTeams()
         .stateIn(viewModelScope, WhileSubscribed(), emptyList())
 
-    private val _teamNowPlaying = MutableStateFlow<Team?>(null)
+    private val _teamNowPlaying = MutableStateFlow<TeamCard?>(null)
     val teamNowPlaying = _teamNowPlaying.flatMapMerge {
         repository.fetchTeam(it?.name)
     }.stateIn(viewModelScope, WhileSubscribed(), null)
@@ -46,8 +47,7 @@ class FamilyFeudViewModel @Inject constructor(
                     answerCards = answerCardList.map { card ->
                         AnswerCardState(
                             answer = card.answer,
-                            points = card.points,
-                            answered = false
+                            points = card.points
                         )
                     }
                 ).also { questions.add(it) }
@@ -55,9 +55,17 @@ class FamilyFeudViewModel @Inject constructor(
         }
     }
 
-    fun nextTeam() = viewModelScope.launch {
-        createdTeams.value.filterNot { it.name in hasGone }
-            .random().also { _teamNowPlaying.emit(it) }
+    fun nextTeam(updateStrikes: Boolean = false) = viewModelScope.launch {
+        createdTeams.value.filterNot { it.name in hasGone }.ifEmpty {
+            hasGone.clear()
+            createdTeams.value
+        }.random().also {
+            hasGone.add(it.name)
+            if (updateStrikes) {
+                _strikeAccumulation.update { 0 }
+            }
+            _teamNowPlaying.emit(it)
+        }
     }
 
     fun selectQuestion(index: Int) = viewModelScope.launch {
@@ -65,17 +73,18 @@ class FamilyFeudViewModel @Inject constructor(
         questions.removeAt(index)
     }
 
-    fun addStrike() { _strikeAccumulation.update { it + 1 } }
+    fun addStrike() {
+
+        _strikeAccumulation.updateAndGet {
+            if (it >= 3) { 0 } else { it + 1 }
+        }.also { if (it == 0) nextTeam() }
+    }
 
     fun createNewTeam(name: String, playerCount: Int) = viewModelScope.launch {
         repository.createTeam(name, playerCount)
     }
 
-    fun awardPoints(points: Int, team: Team) = viewModelScope.launch {
-
-        println(team.points)
-        println(points)
-        println(team.points + points)
+    fun awardPoints(points: Int, team: TeamCard) = viewModelScope.launch {
 
         val updated = team.copy(points = team.points + points)
         repository.updatePoints(updated)

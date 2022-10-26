@@ -24,7 +24,6 @@ object FamilyFeudModule {
     fun provideFamilyFeudDatabase(@ApplicationContext context: Context) : FamilyFeudDatabase {
         return databaseBuilder(context, FamilyFeudDatabase::class.java, DATABASE_NAME)
             .createFromAsset(PRE_POPULATED_ROUTE)
-            .fallbackToDestructiveMigration()
             .build()
     }
 
@@ -35,6 +34,4 @@ object FamilyFeudModule {
     @Provides
     fun provideTeamDao(database: FamilyFeudDatabase) = database.teamDao()
 
-    @Provides
-    fun providePlayerDao(database: FamilyFeudDatabase) = database.playerDao()
 }
