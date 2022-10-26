@@ -2,6 +2,7 @@ package com.cerve.co.familyfeudincompose.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -34,7 +35,7 @@ fun TeamCreationScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            LazyColumn(modifier = Modifier.statusBarsPadding()) {
+            LazyRow(modifier = Modifier.statusBarsPadding()) {
                 items(teamList) { team ->
                     Card(modifier = Modifier.size(64.dp)) {
                         Box(contentAlignment = Alignment.Center) {

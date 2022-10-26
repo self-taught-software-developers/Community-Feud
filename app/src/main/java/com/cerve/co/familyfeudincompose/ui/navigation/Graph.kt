@@ -15,10 +15,11 @@ import com.cerve.co.familyfeudincompose.ui.navigation.Route.TEAM_CREATION
 import com.cerve.co.familyfeudincompose.ui.navigation.Route.WINNER
 import com.cerve.co.familyfeudincompose.ui.screen.MainGamingScreen
 import com.cerve.co.familyfeudincompose.ui.screen.TeamCreationScreen
+import com.cerve.co.familyfeudincompose.ui.screen.WinnerScreen
 
 @Composable
 fun Graph(
-    startDestination: String = MAIN_GAME,
+    startDestination: String = TEAM_CREATION,
     vm: FamilyFeudViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -59,12 +60,17 @@ fun Graph(
                 onNextTeam = vm::nextTeam,
                 strikes = strikes,
                 onAddStrike = vm::addStrike
-            )
+            ) { navController.navigate(WINNER) }
 
         }
 
         composable(WINNER) {
-            val winner = vm.winningTeam.collectAsState()
+            val winner by vm.winningTeam.collectAsState()
+
+            WinnerScreen(team = winner) {
+
+            }
+
         }
 
     }

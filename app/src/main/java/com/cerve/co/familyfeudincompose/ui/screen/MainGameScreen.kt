@@ -1,13 +1,17 @@
 package com.cerve.co.familyfeudincompose.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,18 +27,27 @@ fun MainGamingScreen(
     onSelectQuestion: (Int) -> Unit,
     modifier: Modifier = Modifier,
     currentTeam: Team?,
-    onAwardPoints: (Int) -> Unit = { },
+    onAwardPoints: (Int, Team) -> Unit = {_, _ -> },
     onNextTeam: () -> Unit = { },
     strikes: Int? = 0,
     onAddStrike: () -> Unit = { },
+    onNavigateForward: () -> Unit
 ) {
+
+    LaunchedEffect(Unit) {
+        onNextTeam()
+    }
 
     Scaffold(
         modifier = modifier,
         topBar = {
             LazyRow(modifier = Modifier.statusBarsPadding()) {
-                items(questionCardList) { card ->
-                    Card(modifier = Modifier.size(64.dp)) {
+                itemsIndexed(questionCardList) { index, card ->
+                    Card(
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clickable { onSelectQuestion(index) }
+                    ) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(text = card.question)
                         }
@@ -57,6 +70,12 @@ fun MainGamingScreen(
                         contentDescription = Icons.Default.Close.name
                     )
                 }
+                IconButton(onClick = { onNavigateForward() }) {
+                    Icon(
+                        imageVector = Icons.Default.Done,
+                        contentDescription = Icons.Default.Done.name
+                    )
+                }
             }
         },
         floatingActionButton = {
@@ -72,7 +91,26 @@ fun MainGamingScreen(
 
     ) { bounds ->
 
-        Box(modifier = Modifier.padding(bounds))
+        Box(modifier = Modifier.padding(bounds)) {
+            currentTeam?.let {
+                Column {
+
+                    Text(text = currentTeam.name)
+                    question?.let {
+                        Text(text = question.question)
+
+                        question.answerCards.forEach {
+                            Text(
+                                modifier = Modifier
+                                    .clickable { onAwardPoints(it.points, currentTeam) },
+                                text = it.answer
+                            )
+                        }
+                    }
+
+                }
+            }
+        }
 
     }
 }
@@ -89,6 +127,8 @@ fun MainGamingScreenPreview() {
                 answerCards = emptyList()
             ),
             currentTeam = null
-        )
+        ) {
+
+        }
     }
 }

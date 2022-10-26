@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cerve.co.familyfeudincompose.data.FamilyFeudRepository
+import com.cerve.co.familyfeudincompose.data.database.entity.Team
 import com.cerve.co.familyfeudincompose.ui.model.AnswerCardState
 import com.cerve.co.familyfeudincompose.ui.model.QuestionCardState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,21 +22,14 @@ class FamilyFeudViewModel @Inject constructor(
     private val _currentQuestion = MutableStateFlow<QuestionCardState?>(null)
     val currentQuestion = _currentQuestion.asStateFlow()
 
+    val hasGone = mutableStateListOf<String>()
+
     val createdTeams = repository.fetchAllTeams()
         .stateIn(viewModelScope, WhileSubscribed(), emptyList())
 
-    val hasGone = mutableStateListOf<String>()
-
-    private val _nowPlaying = MutableStateFlow<String?>(null)
-    val nowPlaying = _nowPlaying.asStateFlow().onEach { name ->
-        name?.let {
-            _strikeAccumulation.update { 0 }
-            hasGone.add(name)
-        }
-    }
-
-    val teamNowPlaying = nowPlaying.flatMapMerge { name ->
-        repository.fetchTeam(name)
+    private val _teamNowPlaying = MutableStateFlow<Team?>(null)
+    val teamNowPlaying = _teamNowPlaying.flatMapMerge {
+        repository.fetchTeam(it?.name)
     }.stateIn(viewModelScope, WhileSubscribed(), null)
 
     private val _strikeAccumulation = MutableStateFlow(0)
@@ -63,7 +57,7 @@ class FamilyFeudViewModel @Inject constructor(
 
     fun nextTeam() = viewModelScope.launch {
         createdTeams.value.filterNot { it.name in hasGone }
-            .random().also { _nowPlaying.update { it } }
+            .random().also { _teamNowPlaying.emit(it) }
     }
 
     fun selectQuestion(index: Int) = viewModelScope.launch {
@@ -73,18 +67,19 @@ class FamilyFeudViewModel @Inject constructor(
 
     fun addStrike() { _strikeAccumulation.update { it + 1 } }
 
-    fun removeQuestion(name: String) = viewModelScope.launch {
-        questions.removeIf { it.question == name }
-    }
-
     fun createNewTeam(name: String, playerCount: Int) = viewModelScope.launch {
         repository.createTeam(name, playerCount)
     }
 
-    fun awardPoints(points: Int) = viewModelScope.launch {
-        teamNowPlaying.value?.let { team ->
-            repository.updatePoints(team.copy(points = team.points + points))
-        }
+    fun awardPoints(points: Int, team: Team) = viewModelScope.launch {
+
+        println(team.points)
+        println(points)
+        println(team.points + points)
+
+        val updated = team.copy(points = team.points + points)
+        repository.updatePoints(updated)
+
     }
 
 }
