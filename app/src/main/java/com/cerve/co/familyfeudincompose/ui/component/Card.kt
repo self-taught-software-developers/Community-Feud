@@ -96,8 +96,8 @@ fun ThemedCard(
 
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = state.question,
-            style = typography.h2
+            text = state.question.first().toString(),
+            style = typography.h4
                 .copy(fontWeight = FontWeight.Black)
         )
 
@@ -117,7 +117,7 @@ fun ThemedCard(
         modifier = modifier.flashCards(
             color = color,
             lines = lines
-        )
+        ),
     ) {
 
         Text(

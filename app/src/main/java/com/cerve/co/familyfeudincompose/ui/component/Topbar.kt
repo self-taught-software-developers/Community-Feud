@@ -14,19 +14,17 @@ import androidx.compose.ui.unit.dp
 import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
 import com.cerve.co.familyfeudincompose.ui.model.QuestionCardState
 
+@JvmName("ThemedTopBar1")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ThemedTopBar(
     teamList: List<TeamCard>,
+    modifier: Modifier = Modifier,
     onDeleteClick: (Int) -> Unit
 ) {
 
-    Column {
-        LazyRow(
-            modifier = Modifier
-                .statusBarsPadding()
-                .height(56.dp)
-        ) {
+    Column(modifier.statusBarsPadding()) {
+        LazyRow(modifier = Modifier.height(56.dp)) {
             itemsIndexed(teamList) { index, team ->
                 ThemedCard(
                     modifier = Modifier.combinedClickable(

@@ -43,10 +43,6 @@ fun MainGamingScreen(
         onNextTeam(false)
     }
 
-    LaunchedEffect(strikes) {
-        println(strikes)
-    }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -60,27 +56,7 @@ fun MainGamingScreen(
                 text = "End Game",
                 enabled = true
             ) { onNavigateForward() }
-//            BottomAppBar(modifier = Modifier.navigationBarsPadding()) {
-//
-//                IconButton(onClick = { onNextTeam(true) }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Close,
-//                        contentDescription = Icons.Default.Close.name
-//                    )
-//                }
-//                IconButton(onClick = { onAddStrike() }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Close,
-//                        contentDescription = Icons.Default.Close.name
-//                    )
-//                }
-//                IconButton(onClick = { onNavigateForward() }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Done,
-//                        contentDescription = Icons.Default.Done.name
-//                    )
-//                }
-//            }
+
         },
         floatingActionButton = {
 
@@ -138,7 +114,6 @@ fun MainGamingScreen(
                     }
 
                 }
-
             }
         }
     }
