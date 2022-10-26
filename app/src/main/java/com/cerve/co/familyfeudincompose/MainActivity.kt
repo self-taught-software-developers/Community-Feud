@@ -8,6 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,6 +26,7 @@ class MainActivity : ComponentActivity() {
             FamilyFeudInComposeTheme {
                 // A surface container using the 'background' color from the theme
                 val viewModel = viewModel<FamilyFeudViewModel>()
+                val team by viewModel.teamNowPlaying.collectAsState()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),

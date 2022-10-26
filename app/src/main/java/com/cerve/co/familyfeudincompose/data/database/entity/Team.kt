@@ -6,5 +6,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class Team(
     @PrimaryKey val name: String,
-    val points: Int
+    val points: Int,
+    val turns: Int
 )
