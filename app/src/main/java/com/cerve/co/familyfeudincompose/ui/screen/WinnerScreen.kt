@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
+import com.cerve.co.familyfeudincompose.ui.component.BottomBarButton
 import com.cerve.co.familyfeudincompose.ui.theme.FamilyFeudInComposeTheme
 
 @Composable
@@ -24,32 +25,11 @@ fun WinnerScreen(
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-//            LazyRow(modifier = Modifier.statusBarsPadding()) {
-//                itemsIndexed(questionCardList) { index, card ->
-//                    Card(
-//                        modifier = Modifier
-//                            .size(64.dp)
-//                            .clickable { onSelectQuestion(index) }
-//                    ) {
-//                        Box(contentAlignment = Alignment.Center) {
-//                            Text(text = card.question)
-//                        }
-//                    }
-//                }
-//            }
-        },
         bottomBar = {
-            BottomAppBar(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .clickable { onRestartGame() }
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = "Restart"
-                )
-            }
+            BottomBarButton(
+                text = "Restart",
+                enabled = true
+            ) { onRestartGame() }
         }
     ) { bounds ->
 
@@ -67,8 +47,7 @@ fun WinnerScreen(
                     Text(text = team.name)
                     Text(text = team.points.toString())
                 }
-            } // TODO NO TEAM
-
+            }
         }
 
     }

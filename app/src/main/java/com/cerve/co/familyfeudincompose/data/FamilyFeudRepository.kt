@@ -13,6 +13,8 @@ class FamilyFeudRepository @Inject constructor(
     suspend fun getQuestionCards() = answerCardDao.getAll()
         .groupBy { it.question }
 
+    suspend fun deleteTeam(team: TeamCard) = teamDao.delete(team)
+
     fun fetchAllTeams() = teamDao.getAll()
     fun fetchTeamWithMostPoints() = teamDao.teamWithMostPoints()
     fun fetchTeam(name: String?) = teamDao.getByName(name)

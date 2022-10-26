@@ -1,15 +1,15 @@
 package com.cerve.co.familyfeudincompose.ui.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
@@ -17,13 +17,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
+import com.cerve.co.familyfeudincompose.ui.component.BottomBarButton
+import com.cerve.co.familyfeudincompose.ui.component.ThemedCard
+import com.cerve.co.familyfeudincompose.ui.component.ThemedTopBar
+import com.cerve.co.familyfeudincompose.ui.component.ThiccDivider
 import com.cerve.co.familyfeudincompose.ui.theme.FamilyFeudInComposeTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TeamCreationScreen(
     teamList: List<TeamCard>,
     onNavigate: () -> Unit,
     modifier: Modifier = Modifier,
+    onDeleteClick: (Int) -> Unit = { },
     onClick: (String, Int) -> Unit = { _, _ -> }
 ) {
 
@@ -34,27 +40,16 @@ fun TeamCreationScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            LazyRow(modifier = Modifier.statusBarsPadding()) {
-                items(teamList) { team ->
-                    Card(modifier = Modifier.size(64.dp)) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(text = team.name)
-                        }
-                    }
-                }
-            }
+            ThemedTopBar(
+                teamList = teamList,
+                onDeleteClick = onDeleteClick
+            )
         },
         bottomBar = {
-            BottomAppBar(modifier = Modifier.navigationBarsPadding()) {
-                IconButton(
-                    onClick = {
-                        onClick(
-                            text,
-                            countText.toInt()
-                        )
-                    }
-                ) { Icon(imageVector = Icons.Default.Add, contentDescription = Icons.Default.Add.name)}
-            }
+            BottomBarButton(
+                text = "Add Team",
+                enabled = text.isNotBlank() && countText.isNotBlank()
+            ) { onClick(text, countText.toInt()) }
         },
         floatingActionButton = {
             if (teamList.size >= 2) {
@@ -66,21 +61,27 @@ fun TeamCreationScreen(
 
             }
         }
-
     ) { bounds ->
 
         Column(
             modifier = Modifier
                 .padding(bounds)
+                .padding(24.dp)
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Family Feud",
+                style = typography.h3
+            )
 
             OutlinedTextField(
                 value = text,
                 onValueChange = { text = it },
                 singleLine = true,
+                label = { Text(text = "Team Name") },
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Down)
                 }
@@ -90,6 +91,7 @@ fun TeamCreationScreen(
                 value = countText,
                 onValueChange = { countText = it },
                 singleLine = true,
+                label = { Text(text = "Team Member Count") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()

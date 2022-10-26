@@ -91,8 +91,13 @@ class FamilyFeudViewModel @Inject constructor(
 
     }
 
+    fun deleteTeamAtIndex(index: Int) = viewModelScope.launch {
+        repository.deleteTeam(createdTeams.value[index])
+    }
+
     fun resetPoints() = viewModelScope.launch {
         hasGone.clear()
+        _strikeAccumulation.update { 0 }
         repository.resetAllPoints()
     }
 

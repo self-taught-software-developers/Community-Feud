@@ -42,6 +42,7 @@ fun Graph(
             TeamCreationScreen(
                 teamList = teams,
                 onNavigate = { navController.navigate(MAIN_GAME) },
+                onDeleteClick = vm::deleteTeamAtIndex,
                 onClick = vm::createNewTeam
             )
 

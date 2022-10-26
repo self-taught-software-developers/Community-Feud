@@ -16,6 +16,9 @@ interface TeamCardDao {
     @Query("SELECT * FROM teamcard")
     fun getAll(): Flow<List<TeamCard>>
 
+    @Delete
+    suspend fun delete(team: TeamCard)
+
     @Upsert
     suspend fun upsertTeam(team: TeamCard)
 

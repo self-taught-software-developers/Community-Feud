@@ -1,91 +1,133 @@
 package com.cerve.co.familyfeudincompose.ui.component
 
+import androidx.compose.animation.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.typography
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
+import com.cerve.co.familyfeudincompose.ui.model.AnswerCardState
 import com.cerve.co.familyfeudincompose.ui.model.QuestionCardState
 import com.cerve.co.familyfeudincompose.ui.theme.FamilyFeudInComposeTheme
 import com.cerve.co.familyfeudincompose.ui.util.DefaultPreview
 
 @Composable
-fun QuestionCard(
-    state: QuestionCardState,
+fun ThemedCard(
+    state: AnswerCardState,
+    showAswer: Boolean,
     modifier : Modifier = Modifier,
     color: Color = MaterialTheme.colors.primary
 ) {
 
-    Box(
+    val density = LocalDensity.current
+
+    Card(
         modifier = modifier
-            .padding(8.dp)
-            .clip(RoundedCornerShape(5))
-            .fillMaxWidth(2f)
-            .fillMaxHeight()
-            .drawWithCache {
+            .fillMaxWidth()
+            .height((54.dp).times(2)),
+        elevation = 0.dp,
+        border = BorderStroke(color = color.copy(alpha = 0.5F), width = 2.dp),
+        backgroundColor = color.copy(alpha = 0.2F)
+    ) {
 
-                onDrawBehind {
+        AnimatedVisibility(
+            visible = showAswer,
+            enter = slideInVertically {
+                // Slide in from 40 dp from the top.
+                with(density) { -40.dp.roundToPx() }
+            } + expandVertically(
+                // Expand from the top.
+                expandFrom = Alignment.Top
+            ) + fadeIn(
+                // Fade in with the initial alpha of 0.3f.
+                initialAlpha = 0.3f
+            ),
+            exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        ) {
+            Box(
+                modifier = Modifier.padding(4.dp),
+                contentAlignment = Alignment.Center
+            ) {
 
-                    val (width, height) = size
-                    val lineGap = height / 5
-
-                    drawRect(
-                        color = color,
-                        topLeft = Offset(0F, 0F),
-                        size = Size(width = width/25 ,height = height)
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "${state.answer}\n${state.points}",
+                    style = typography.body1.copy(
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center
                     )
 
-                    repeat(5) { y ->
-                        drawLine(
-                            color = color,
-                            start = Offset(0F, lineGap * y),
-                            end = Offset(width, lineGap * y)
-                        )
-                    }
+                )
+            }
+        }
+    }
+}
 
-                }
-            },
+@Composable
+fun ThemedCard(
+    state: QuestionCardState,
+    modifier : Modifier = Modifier,
+    color: Color = MaterialTheme.colors.primary,
+    lines: Int = 6
+) {
+
+    Box(
+        modifier = modifier
+            .flashCards(
+                color = color,
+                lines = lines
+            )
     ) {
 
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = state.question,
-            style = MaterialTheme.typography.h3
+            style = typography.h2
+                .copy(fontWeight = FontWeight.Black)
         )
 
     }
 
 }
 
-fun split(x: Int, n: Int) : List<Int> {
+@Composable
+fun ThemedCard(
+    state: TeamCard,
+    modifier : Modifier = Modifier,
+    color: Color = MaterialTheme.colors.primary,
+    lines: Int = 6
+) {
 
-    return when {
-        (x < n) -> emptyList()
-        (x % n == 0) -> (0 until n).map { x / n }
+    Box(
+        modifier = modifier.flashCards(
+            color = color,
+            lines = lines
+        )
+    ) {
 
-        else -> {
-            // up to n-(x % n) the values
-            // will be x / n
-            // after that the values
-            // will be x / n + 1
-            val zp = n - x % n
-            val pp = x / n
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            text = state.name,
+            style = typography.body1
+                .copy(fontWeight = FontWeight.Black),
+            overflow = TextOverflow.Ellipsis
+        )
 
-            (0 until n)
-                .map { if (it >= zp) { pp + 1 } else { pp } }
-
-        }
     }
 
 }
@@ -94,7 +136,7 @@ fun split(x: Int, n: Int) : List<Int> {
 @Composable
 fun AnswerCardPreview() {
     FamilyFeudInComposeTheme {
-        QuestionCard(state = QuestionCardState(
+        ThemedCard(state = QuestionCardState(
             question = "Lorem ipsum dolor sit amet?",
             answerCards = listOf()
         ))
