@@ -1,8 +1,10 @@
 package com.cerve.co.familyfeudincompose.ui.navigation
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -68,7 +70,9 @@ fun Graph(
             val winner by vm.winningTeam.collectAsState()
 
             WinnerScreen(team = winner) {
-
+                vm.resetPoints().also {
+                    navController.navigate(TEAM_CREATION)
+                }
             }
 
         }

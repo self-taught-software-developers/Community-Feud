@@ -91,4 +91,9 @@ class FamilyFeudViewModel @Inject constructor(
 
     }
 
+    fun resetPoints() = viewModelScope.launch {
+        hasGone.clear()
+        repository.resetAllPoints()
+    }
+
 }

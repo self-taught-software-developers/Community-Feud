@@ -19,4 +19,7 @@ interface TeamCardDao {
     @Upsert
     suspend fun upsertTeam(team: TeamCard)
 
+    @Query("UPDATE teamcard SET points = 0")
+    suspend fun resetAllPoints()
+
 }

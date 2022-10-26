@@ -1,8 +1,12 @@
 package com.cerve.co.familyfeudincompose.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -36,21 +40,16 @@ fun WinnerScreen(
 //            }
         },
         bottomBar = {
-//            BottomAppBar(modifier = Modifier.navigationBarsPadding()) {
-//
-//                IconButton(onClick = { onNextTeam() }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Close,
-//                        contentDescription = Icons.Default.Close.name
-//                    )
-//                }
-//                IconButton(onClick = { onAddStrike() }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Close,
-//                        contentDescription = Icons.Default.Close.name
-//                    )
-//                }
-//            }
+            BottomAppBar(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .clickable { onRestartGame() }
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = "Restart"
+                )
+            }
         }
     ) { bounds ->
 

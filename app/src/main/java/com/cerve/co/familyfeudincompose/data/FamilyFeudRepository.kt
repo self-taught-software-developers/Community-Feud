@@ -31,4 +31,8 @@ class FamilyFeudRepository @Inject constructor(
         teamDao.upsertTeam(team)
     }
 
+    suspend fun resetAllPoints() {
+        teamDao.resetAllPoints()
+    }
+
 }
