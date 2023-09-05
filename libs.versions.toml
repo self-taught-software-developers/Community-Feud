@@ -1,10 +1,14 @@
 [versions]
-android_compile_sdk = 33
-android_target_sdk = 33
-android_min_sdk = 24
+#android_compile_sdk = 33
+#android_target_sdk = 33
+#android_min_sdk = 24
 kotlin_version = "1.9.10"
 compose_version = "1.4.0"
 
 [libraries]
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose_version" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose_version" }
+compose-material = { module = "org.jetbrains.compose.material:material", version.ref = "compose_version" }
+compose-component-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose_version" }
 
 [plugins]
