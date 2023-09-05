@@ -6,12 +6,11 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
     }
 }
 rootProject.name = "FamilyFeudInCompose"
-include ':app'
-include ':shared'
+include(":app")
+include(":shared")
