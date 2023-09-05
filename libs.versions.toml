@@ -1,14 +1,19 @@
 [versions]
-#android_compile_sdk = 33
-#android_target_sdk = 33
-#android_min_sdk = 24
+android_target_sdk = "34"
+android_min_sdk = "24"
 kotlin_version = "1.9.10"
 compose_version = "1.4.0"
+androidx_activity_version = "1.7.2"
+androidx_appcompat_version = "1.6.1"
+androidx_core_version = "1.10.1"
 
 [libraries]
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose_version" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose_version" }
 compose-material = { module = "org.jetbrains.compose.material:material", version.ref = "compose_version" }
 compose-component-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose_version" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx_activity_version" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx_appcompat_version" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx_core_version" }
 
 [plugins]
