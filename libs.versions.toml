@@ -1,4 +1,6 @@
 [versions]
+kotlin_version = "1.9.10"
+compose_version = "1.4.0"
 
 [libraries]
 
