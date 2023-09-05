@@ -1,6 +1,12 @@
 package com.cerve.co.familyfeudincompose.ui.component
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,13 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.cerve.co.familyfeudincompose.data.database.entity.TeamCard
 import com.cerve.co.familyfeudincompose.ui.model.AnswerCardState
 import com.cerve.co.familyfeudincompose.ui.model.QuestionCardState
-import com.cerve.co.familyfeudincompose.ui.theme.FamilyFeudInComposeTheme
-import com.cerve.co.familyfeudincompose.ui.util.DefaultPreview
 
 @Composable
 fun ThemedCard(
@@ -103,42 +104,4 @@ fun ThemedCard(
 
     }
 
-}
-
-@Composable
-fun ThemedCard(
-    state: TeamCard,
-    modifier : Modifier = Modifier,
-    color: Color = MaterialTheme.colors.primary,
-    lines: Int = 6
-) {
-
-    Box(
-        modifier = modifier.flashCards(
-            color = color,
-            lines = lines
-        ),
-    ) {
-
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = state.name,
-            style = typography.body1
-                .copy(fontWeight = FontWeight.Black),
-            overflow = TextOverflow.Ellipsis
-        )
-
-    }
-
-}
-
-@DefaultPreview
-@Composable
-fun AnswerCardPreview() {
-    FamilyFeudInComposeTheme {
-        ThemedCard(state = QuestionCardState(
-            question = "Lorem ipsum dolor sit amet?",
-            answerCards = listOf()
-        ))
-    }
 }
