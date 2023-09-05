@@ -6,13 +6,7 @@ plugins {
 
 kotlin {
 
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
-        }
-    }
+    androidTarget()
     
     listOf(
         iosX64(),
@@ -29,7 +23,19 @@ kotlin {
             dependencies {
                 implementation(libs.compose.runtime)
                 implementation(libs.compose.foundation)
+                implementation(libs.compose.material)
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(libs.compose.component.resources)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                with(libs.androidx) {
+                    api(activity.compose)
+                    api(appcompat)
+                    api(core.ktx)
+                }
+
             }
         }
         val commonTest by getting {
@@ -42,12 +48,20 @@ kotlin {
 
 android {
     namespace = "com.cerve.multiplatform.shared"
-    compileSdk = 34
+    compileSdk = libs.versions.android.target.sdk.orNull?.toInt()
+
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].res.srcDirs("src/androidMain/res")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+
     defaultConfig {
-        minSdk = 26
+        minSdk = libs.versions.android.min.sdk.orNull?.toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlin {
+        jvmToolchain(17)
     }
 }
