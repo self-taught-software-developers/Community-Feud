@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("org.jetbrains.compose")
 }
 
 kotlin {
@@ -39,8 +40,12 @@ kotlin {
 
 android {
     namespace = "com.cerve.multiplatform.shared"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         minSdk = 26
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
