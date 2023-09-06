@@ -1,14 +1,17 @@
+rootProject.name = "FamilyFeudInCompose"
+
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         google()
-        mavenCentral()
+        gradlePluginPortal()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
     versionCatalogs {
         create("libs") {
@@ -16,6 +19,6 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "FamilyFeudInCompose"
+
 include(":app")
 include(":shared")
